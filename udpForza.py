@@ -158,6 +158,7 @@ def GetP(Menu=[], Data=[], BitSize = 1):
 
 
 
+
 while True:
     recv_data = ForzaUDPSocket.recvfrom(8196*16)
     # recv_data存储元组（接收到的数据，（发送方的ip,port））
@@ -181,7 +182,7 @@ while True:
     # cv2.waitKey(1)
     # print(struct.unpack('!i',recv_data[0]))  
     # # 需要使用4字节来转
-    print(Recieve_Packets_Length_Count)
+    # print(Recieve_Packets_Length_Count)
     Recieve_Packets_Count = Recieve_Packets_Count + 1
     print(Recieve_Packets_Count)
     print("end")
