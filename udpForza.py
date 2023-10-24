@@ -1,5 +1,5 @@
 import socket
-
+import struct
 
 import numpy as np
 import cv2
@@ -32,10 +32,19 @@ image[:, :, 2] = 0    # Red通道
 
 
 ForzaUDPSocket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-LocalAddr=("192.168.7.156",7788)
+LocalAddr=("127.0.0.1",7788)
 ForzaUDPSocket.bind(LocalAddr)
 
 BufferOffset = 0
+
+Recieve_Packets_Count = 0
+
+
+# def convert_to_hex(In_BIN_string):
+#   hex_string = ""
+#   for char in In_BIN_string:
+#     hex_string += hex(ord(char))[2:]
+#   return hex_string
 
 def GetP(Menu=[], Data=[], BitSize = 1):
     "GetP(mainstring, DataName, BufferOffset)"
@@ -150,21 +159,32 @@ def GetP(Menu=[], Data=[], BitSize = 1):
 
 
 while True:
-    recv_data = ForzaUDPSocket.recvfrom(8196)
+    recv_data = ForzaUDPSocket.recvfrom(8196*16)
     # recv_data存储元组（接收到的数据，（发送方的ip,port））
     recv_msg = recv_data[0] # 信息内容
     send_addr = recv_data[1] # 信息地址
+    Recieve_Packets_Length_Count = 0
+    for byte in recv_data[0] :
+        Recieve_Packets_Length_Count += 1
+        value = int(byte)
+        
+        # print(value)
     # 4.打印接收到的数据
     # print(recv_data)
     # print("信息来自:%s 内容是:%s" %(str(send_addr),recv_msg.decode("gbk")))
     # print('接收数据长度', len(recv_data[0]))
     # print(GetP(recv_data[0], "Speed"))
-    image[:, :, 0] = np.uint8(GetP(recv_data[0], "AccelerationX"))  # Blue通道
-    image[:, :, 1] = np.uint8(GetP(recv_data[0], "AccelerationY"))     # Green通道
-    image[:, :, 2] = np.uint8(GetP(recv_data[0], "AccelerationZ"))     # Red通道
-    cv2.imshow("Image", image)
-    cv2.waitKey(1)
-
+    # image[:, :, 0] = np.uint8(GetP(recv_data[0], "AccelerationX"))  # Blue通道
+    # image[:, :, 1] = np.uint8(GetP(recv_data[0], "AccelerationY"))     # Green通道
+    # image[:, :, 2] = np.uint8(GetP(recv_data[0], "AccelerationZ"))     # Red通道
+    # cv2.imshow("Image", image)
+    # cv2.waitKey(1)
+    # print(struct.unpack('!i',recv_data[0]))  
+    # # 需要使用4字节来转
+    print(Recieve_Packets_Length_Count)
+    Recieve_Packets_Count = Recieve_Packets_Count + 1
+    print(Recieve_Packets_Count)
+    print("end")
 
 # 5.退出套接字
 udp_socket.close()
