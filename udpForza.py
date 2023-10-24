@@ -32,12 +32,12 @@ image[:, :, 2] = 0    # Red通道
 
 
 ForzaUDPSocket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-LocalAddr=("127.0.0.1",7788)
+LocalAddr=("192.168.7.156",7788)
 ForzaUDPSocket.bind(LocalAddr)
 
 BufferOffset = 0
 
-def GetP(Menu=[], Data=[], BitSize = 4):
+def GetP(Menu=[], Data=[], BitSize = 1):
     "GetP(mainstring, DataName, BufferOffset)"
     # 获得字符串长度并设置字符串变化的位置
     if len(Menu) == 324:  # FH4
