@@ -1,6 +1,6 @@
 import socket
 import struct
-
+import binascii
 import numpy as np
 import cv2
 
@@ -148,9 +148,7 @@ def GetP(Menu=[], Data=[], BitSize = 1):
     for key, value in number_table.items():
         if key in Data:
             Pstart.append(value)
-
     Value2Return = Menu[Pstart[0]:Pstart[0]+BitSize]
-    
     # print(Value2Return)
     return Value2Return
 
@@ -165,9 +163,14 @@ while True:
     recv_msg = recv_data[0] # 信息内容
     send_addr = recv_data[1] # 信息地址
     Recieve_Packets_Length_Count = 0
-    for byte in recv_data[0] :
-        Recieve_Packets_Length_Count += 1
-        value = int(byte)
+    
+
+    recv_msg = binascii.b2a_hex(recv_msg).decode('utf-8')
+
+
+    # for byte in recv_data[0] :
+    #     Recieve_Packets_Length_Count += 1
+    #     value = int(byte)
         
         # print(value)
     # 4.打印接收到的数据
@@ -175,16 +178,20 @@ while True:
     # print("信息来自:%s 内容是:%s" %(str(send_addr),recv_msg.decode("gbk")))
     # print('接收数据长度', len(recv_data[0]))
     # print(GetP(recv_data[0], "Speed"))
+
     # image[:, :, 0] = np.uint8(GetP(recv_data[0], "AccelerationX"))  # Blue通道
     # image[:, :, 1] = np.uint8(GetP(recv_data[0], "AccelerationY"))     # Green通道
     # image[:, :, 2] = np.uint8(GetP(recv_data[0], "AccelerationZ"))     # Red通道
     # cv2.imshow("Image", image)
     # cv2.waitKey(1)
+
+
     # print(struct.unpack('!i',recv_data[0]))  
     # # 需要使用4字节来转
     # print(Recieve_Packets_Length_Count)
     Recieve_Packets_Count = Recieve_Packets_Count + 1
     print(Recieve_Packets_Count)
+    print(recv_msg)
     print("end")
 
 # 5.退出套接字
